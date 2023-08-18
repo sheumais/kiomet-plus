@@ -1,6 +1,6 @@
 # Kiomet.com
 
-[![Build](https://github.com/SoftbearStudios/kiomet/actions/workflows/build.yml/badge.svg)](https://github.com/SoftbearStudios/kiomet/actions/workflows/build.yml)
+[![Build](https://github.com/sheumais/kiomet-plus/actions/workflows/build.yml/badge.svg)](https://github.com/sheumais/kiomet-plus/actions/workflows/build.yml)
 <a href='https://discord.gg/YMheuFQWTX'>
   <img src='https://img.shields.io/badge/Kiomet.com-%23announcements-blue.svg' alt='Kiomet.com Discord' />
 </a>
