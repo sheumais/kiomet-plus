@@ -21,7 +21,7 @@ pub trait TowerTranslation: Copy + Sized {
             Artillery => self.artillery_label(),
             Barracks => self.barracks_label(),
             Bunker => self.bunker_label(),
-            //Capitol => "Capitol", // TODO
+            Capitol => "Capitol", // TODO
             Centrifuge => self.centrifuge_label(),
             City => self.city_label(),
             Cliff => self.cliff_label(),
@@ -30,10 +30,10 @@ pub trait TowerTranslation: Copy + Sized {
             Generator => self.generator_label(),
             Headquarters => self.headquarters_label(),
             Helipad => self.helipad_label(),
-            //Icbm => "ICBM",   // TODO
-            //Laser => "Laser", // TODO
+            Icbm => "ICBM",   // TODO
+            Laser => "Laser", // TODO
             Launcher => self.launcher_label(),
-            //Metropolis => "Metropolis", // TODO
+            Metropolis => "Metropolis", // TODO
             Mine => self.mine_label(),
             Projector => self.projector_label(),
             Quarry => self.quarry_label(),

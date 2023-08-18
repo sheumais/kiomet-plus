@@ -33,10 +33,10 @@ pub fn tower_layout(tower: &Tower, time: f32) -> impl Iterator<Item = UnitLayout
         // Tall towers need to offset their units lower.
         City | Launcher | Reactor | Rocket => -0.5,
         // Large towers need a large offset.
-        //Capitol => -0.6,
-        //Icbm => -0.7,
-        //Metropolis => -0.8,
-        //Laser => -0.9,
+        Capitol => -0.6,
+        Icbm => -0.7,
+        Metropolis => -0.8,
+        Laser => -0.9,
         _ => -0.4,
     };
 

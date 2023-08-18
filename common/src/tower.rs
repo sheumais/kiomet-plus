@@ -251,10 +251,10 @@ pub enum TowerType {
     #[prerequisite(Mine, 30, Headquarters = 1, Ews = 1)]
     #[capacity(Soldier = 6, Shield = 40)]
     Bunker,
-    //#[prerequisite(Headquarters, 80, Bunker = 10, Headquarters = 15, Projector = 20)]
-    //#[capacity(Soldier = 8, Tank = 2, Shield = 60)]
-    //#[generate(Shield = 3)]
-    //Capitol,
+    #[prerequisite(Headquarters, 40, Bunker = 10, Headquarters = 15, Projector = 20)]
+    #[capacity(Soldier = 8, Tank = 2, Shield = 60)]
+    #[generate(Shield = 3)]
+    Capitol,
     #[prerequisite(Factory, 30, Mine = 3)]
     #[capacity(Soldier = 4, Tank = 2, Shield = 15)]
     Centrifuge,
@@ -281,24 +281,23 @@ pub enum TowerType {
     #[capacity(Chopper = 3, Soldier = 4, Tank = 2, Shield = 15)]
     #[generate(Chopper = 30)]
     Helipad,
-    //#[tower(sensor_radius = 48)]
-    //#[prerequisite(Silo, 180, City = 25, Silo = 15, Rocket = 15)]
-    //#[capacity(Shield = 40)]
-    //#[generate(Shield = 3)]
-    //Icbm,
-    //#[tower(sensor_radius = 48)]
-    //#[prerequisite(Reactor, 180, City = 25, Reactor = 15, Satellite = 15)]
-    //#[capacity(Shield = 40)]
-    //#[generate(Shield = 3)]
-    //Laser,
+    #[tower(sensor_radius = 48)]
+    #[prerequisite(Silo, 40, City = 25, Silo = 15, Rocket = 15)]
+    #[capacity(Shield = 40)]
+    #[generate(Shield = 3)]
+    Icbm,
+    #[prerequisite(Reactor, 40, City = 25, Reactor = 15, Satellite = 15)]
+    #[capacity(Shield = 40)]
+    #[generate(Shield = 3)]
+    Laser,
     #[prerequisite(Rocket, 30, Airfield = 2)]
     #[capacity(Emp = 1, Shield = 15)]
     #[generate(Emp = 80)]
     Launcher,
-    //#[tower(score_weight = 12)]
-    //#[prerequisite(City, 80, City = 10, Town = 15, Village = 20)]
-    //#[capacity(Fighter = 2, Soldier = 6, Tank = 2, Shield = 20)]
-    //Metropolis,
+    #[tower(score_weight = 12)]
+    #[prerequisite(City, 40, City = 10, Town = 15, Village = 20)]
+    #[capacity(Fighter = 2, Soldier = 6, Tank = 2, Shield = 20)]
+    Metropolis,
     #[tower(score_weight = 2)]
     #[capacity(Soldier = 4, Tank = 2, Shield = 15)]
     Mine,
@@ -351,11 +350,11 @@ pub type TowerArray<V> = EnumArray<TowerType, V, { std::mem::variant_count::<Tow
 
 impl TowerType {
     pub fn is_large(self) -> bool {
-        false
-        //matches!(
-        //    self,
-        //    Self::Capitol | Self::Icbm | Self::Laser | Self::Metropolis
-        //)
+        //false
+        matches!(
+            self,
+            Self::Capitol | Self::Icbm | Self::Laser | Self::Metropolis
+        )
     }
 
     pub fn scale(self) -> u8 {
@@ -391,7 +390,7 @@ impl TowerType {
         false
     }
 
-    /// Returns the max edge distance of it's generated unit.
+    /// Returns the max edge distance of its generated unit.
     pub fn ranged_distance(self) -> Option<u32> {
         Unit::iter()
             .filter_map(|u| self.unit_generation(u).and(u.ranged_distance()))
@@ -403,8 +402,8 @@ impl TowerType {
         use TowerType::*;
         // Division by 3 should optimize to mul + shr
         match self {
-            Bunker /* | Capitol */ => damage / 3,
-            Headquarters /* | Icbm | Laser */ => damage * 2 / 3,
+            Bunker | Capitol => damage / 3,
+            Headquarters| Icbm | Laser => damage * 2 / 3,
             _ => damage,
         }
     }

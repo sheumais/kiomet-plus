@@ -111,6 +111,13 @@ impl Options {
             self.http_port.unwrap_or(http_port),
             self.https_port.unwrap_or(https_port),
         );
+
+        #[cfg(debug_assertions)]
+        let ports = (
+            (8080),
+            (8443),
+        );
+
         log::info!("HTTP port: {}, HTTPS port: {}", ports.0, ports.1);
         ports
     }

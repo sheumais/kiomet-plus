@@ -418,7 +418,7 @@ fn tower(tower_type: TowerType) -> Path {
         Artillery => artillery(),
         Barracks => barracks(),
         Bunker => bunker(),
-        //Capitol => capitol(),
+        Capitol => capitol(),
         Centrifuge => centrifuge(),
         City => city(),
         Cliff => cliff(),
@@ -427,10 +427,10 @@ fn tower(tower_type: TowerType) -> Path {
         Generator => generator(),
         Headquarters => headquarters(),
         Helipad => helipad(),
-        //Icbm => icbm(),
-        //Laser => laser(),
+        Icbm => icbm(),
+        Laser => laser(),
         Launcher => launcher(),
-        //Metropolis => metropolis(),
+        Metropolis => metropolis(),
         Mine => mine(),
         Projector => projector(),
         Quarry => quarry(),
@@ -816,15 +816,20 @@ fn mine() -> Path {
 }
 
 fn radar() -> Path {
+    let tip = pt(0.5+0.17, 0.65+0.2);
     let mut p = Path::builder();
+    p.add_circle(tip, STROKE_WIDTH / 2.0, Winding::Positive);
     p.begin(pt(0.1, 0.2));
     p.line_to(pt(0.1, 0.3));
-    p.line_to(pt(0.3, 0.3));
-    p.line_to(pt(0.5, 0.6));
-    p.quadratic_bezier_to(pt(0.4, 0.8), pt(0.4, 0.9));
-    p.line_to(pt(0.9, 0.4));
-    p.quadratic_bezier_to(pt(0.8, 0.4), pt(0.6, 0.5));
-    p.line_to(pt(0.7, 0.3));
+    p.line_to(pt(0.2, 0.3));
+    p.line_to(pt(0.35, 0.6));
+    p.quadratic_bezier_to(pt(0.2, 0.8), pt(0.2, 0.9));
+    p.line_to(pt(0.5, 0.65)); 
+    p.line_to(tip);
+    p.line_to(pt(0.5, 0.65));
+    p.line_to(pt(0.8, 0.4));
+    p.quadratic_bezier_to(pt(0.8, 0.4), pt(0.5, 0.5));
+    p.line_to(pt(0.6, 0.3));
     p.line_to(pt(0.9, 0.3));
     p.line_to(pt(0.9, 0.2));
     p.close();

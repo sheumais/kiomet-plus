@@ -159,11 +159,16 @@ impl PlayerAlias {
     }
 
     /// Good for known-good names.
+    /*
     pub fn new_unsanitized(str: &str) -> Self {
         let sliced = slice_up_to_array_string(str);
         #[cfg(feature = "server")]
-        debug_assert_eq!(sliced, trim_and_slice_up_to_array_string(str));
+        //debug_assert_eq!(sliced, trim_and_slice_up_to_array_string(str));
         Self(sliced)
+    }*/
+
+    pub fn new_unsanitized(str: &str) -> Self {
+        Self(slice_up_to_array_string(str))
     }
 
     pub fn from_bot_player_id(player_id: PlayerId) -> Self {
