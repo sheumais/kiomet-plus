@@ -20,11 +20,14 @@ pub trait TowerTranslation: Copy + Sized {
             Armory => self.armory_label(),
             Artillery => self.artillery_label(),
             Barracks => self.barracks_label(),
+            Buoy => "Buoy", // TODO
             Bunker => self.bunker_label(),
             Capitol => "Capitol", // TODO
             Centrifuge => self.centrifuge_label(),
             City => self.city_label(),
             Cliff => self.cliff_label(),
+            Dock => "Dock",       // TODO
+            Drydock => "Drydock", // TODO
             Ews => self.ews_label(),
             Factory => self.factory_label(),
             Generator => self.generator_label(),
@@ -33,19 +36,23 @@ pub trait TowerTranslation: Copy + Sized {
             Icbm => "ICBM",   // TODO
             Laser => "Laser", // TODO
             Launcher => self.launcher_label(),
+            Lighthouse => "Lighthouse", // TODO
             Metropolis => "Metropolis", // TODO
             Mine => self.mine_label(),
+            //Pier => "Pier", // TODO
             Projector => self.projector_label(),
             Quarry => self.quarry_label(),
             Radar => self.radar_label(),
             Rampart => self.rampart_label(),
             Reactor => self.reactor_label(),
             Refinery => self.refinery_label(),
+            Rig => "Rig", // TODO
             Rocket => self.rocket_label(),
             Runway => self.runway_label(),
             Satellite => self.satellite_label(),
             Silo => self.silo_label(),
             Town => self.town_label(),
+            //Turbine => "Turbine", // TODO
             Village => self.village_label(),
         }
     }
@@ -82,15 +89,18 @@ pub trait TowerTranslation: Copy + Sized {
     fn unit_label(self, unit: Unit) -> &'static str {
         use Unit::*;
         match unit {
+            //Boat => "Boat", // TODO
             Bomber => self.bomber_label(),
             Chopper => self.chopper_label(),
             Emp => self.emp_label(),
             Fighter => self.fighter_label(),
+            //Frigate => "Frigate", // TODO
             Nuke => self.nuke_label(),
             Ruler => self.ruler_label(),
             Shell => self.shell_label(),
             Shield => self.shield_label(),
             Soldier => self.soldier_label(),
+            //Submarine => "Submarine", // TODO
             Tank => self.tank_label(),
         }
     }

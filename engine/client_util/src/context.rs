@@ -412,7 +412,7 @@ impl<G: GameClient> Context<G> {
 
     /// Enable visibility cheating.
     pub fn cheats(&self) -> bool {
-        cfg!(debug_assertions)
+        true
     }
 }
 

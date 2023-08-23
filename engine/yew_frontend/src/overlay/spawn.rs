@@ -43,8 +43,7 @@ pub fn spawn_overlay(props: &DialogProps) -> Html {
 
     let input_style = css!(
         r#"
-        border-radius: 3rem;
-        border: 0;
+        border: 5px solid #8C8C8C;
         box-sizing: border-box;
         color: #FFFA;
         cursor: pointer;
@@ -57,17 +56,20 @@ pub fn spawn_overlay(props: &DialogProps) -> Html {
         pointer-events: all;
         text-align: center;
         white-space: nowrap;
-        width: 100%;
+        width: 50%;
+        left: 25%;
+        position: relative;
+        backdrop-filter: blur(3px);
+        border-radius: 3rem;
    "#
     );
 
     let button_style = css!(
         r#"
-        background-color: #549f57;
-        border-radius: 1rem;
-        border: 1px solid #61b365;
+        background-color: #74B9FF;
+        border: 5px solid #C8FFFF;
         box-sizing: border-box;
-        color: white;
+        color: #C8FFFF;
         cursor: pointer;
         font-size: 3.25rem;
         left: 50%;
@@ -80,6 +82,7 @@ pub fn spawn_overlay(props: &DialogProps) -> Html {
         transform: translate(-50%, 0%);
         white-space: nowrap;
         width: min-content;
+        border-radius: 1rem;
 
         :disabled {
             filter: brightness(0.8);
@@ -87,7 +90,7 @@ pub fn spawn_overlay(props: &DialogProps) -> Html {
         }
 
         :hover:not(:disabled) {
-            filter: brightness(0.95);
+            filter: brightness(1.0);
         }
 
         :active:not(:disabled) {

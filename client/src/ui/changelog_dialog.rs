@@ -14,8 +14,27 @@ pub fn changelog_dialog() -> Html {
     html! {
         <Dialog title={t.changelog_title(game_id)}>
             <p>{"Warning: This changelog may not always be fully up to date"}</p>
+            // <li>{""}</li>
 
             <h2>{"2023"}</h2>
+
+            <h3>{"23/8/2023"}</h3>
+
+            <ul>
+                <li>{"Added four unreleased super-towers: "}
+                {[TowerType::Capitol, TowerType::Icbm, TowerType::Laser, TowerType::Metropolis].into_iter().map(|tower_type| html!{
+                    <TowerIcon {tower_type}/>
+                }).intersperse_with(|| html!{{", "}}).collect::<Html>()}{"."}
+                </li>
+                <li>{"Changed "}<TowerIcon tower_type={TowerType::Radar}/>{", "}<TowerIcon tower_type={TowerType::City}/> {" and "} <TowerIcon tower_type={TowerType::Metropolis}/> {"'s svg designs."}</li>
+                <li>{"Added speed to"}<UnitIcon unit={Unit::Shield}/>{"'s help page."}</li>
+                <li>{"Changed "} <TowerIcon tower_type={TowerType::Radar}/> {", "} <TowerIcon tower_type={TowerType::Rocket}/> {" and "} <TowerIcon tower_type={TowerType::Launcher}/> {"'s requirements."}</li>
+                <li>{"Prerequisite lines on the tower page now only show for the selected tower."}</li>
+                <li>{"Added some water towers"}{[TowerType::Buoy, TowerType::Dock, TowerType::Drydock, TowerType::Lighthouse, TowerType::Rig].into_iter().map(|tower_type| html!{
+                    <TowerIcon {tower_type}/>
+                }).collect::<Html>()}
+                 {" which are, for the moment, land based."}</li>
+            </ul>
 
             <h3>{"8/4/2023"}</h3>
 

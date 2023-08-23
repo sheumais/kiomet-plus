@@ -35,18 +35,19 @@ pub fn towers_dialog(props: &TowersDialogProps) -> Html {
     let upgrade_css = css!(
         r#"
         stroke: white;
-        stroke-width: 0.25;
+        stroke-width: 0.15;
         stroke-linecap: round;
-        opacity: 0.9;
+        opacity: 1.0;
         "#
     );
 
     let prerequisite_css = css!(
         r#"
         stroke: white;
-        stroke-width: 0.15;
-        stroke-dasharray: 0.5, 0.5;
-        opacity: 0.25;
+        stroke-width: 0.3;
+        stroke-dasharray: 0.5, 1.0, 1.0, 1.0;
+        stroke-linecap: round;
+        opacity: 0.5;
         "#
     );
 
@@ -235,16 +236,20 @@ pub fn towers_dialog(props: &TowersDialogProps) -> Html {
                             >
                             <title>{t.tower_type_label(tower)}</title>
                             </image>
-                            if let Some(downgrade) = tower.downgrade().map(|downgrade| layout[downgrade]) {
-                                <line x1={coord_middle_string(downgrade.x)} y1={coord_bottom_string(downgrade.y)} x2={coord_middle_string(offset.x)} y2={coord_string(offset.y)} class={upgrade_css} />
-                            }
+                            if selected {
                             {tower.prerequisites().map(|(prerequisite, _)| {
                                 let prerequisite = layout[prerequisite];
                                 let prerequisite_css = prerequisite_css.clone();
-                                html_nested! {
-                                    <line x1={coord_middle_string(prerequisite.x)} y1={coord_bottom_string(prerequisite.y)} x2={coord_middle_string(offset.x)} y2={coord_string(offset.y)} class={prerequisite_css} />
-                                }
-                            }).collect::<Html>()}
+                                if let Some(downgrade) = tower.downgrade().map(|downgrade| layout[downgrade]) && downgrade == prerequisite {
+                                    html_nested! {<line x1={coord_middle_string(downgrade.x)} y1={coord_bottom_string(downgrade.y)} x2={coord_middle_string(offset.x)} y2={coord_string(offset.y)} class={prerequisite_css} />}
+                                } else if let Some(downgrade) = tower.downgrade().map(|downgrade| layout[downgrade]) {  
+                                    let upgrade_css = upgrade_css.clone();
+                                    html_nested! {<><line x1={coord_middle_string(downgrade.x)} y1={coord_bottom_string(downgrade.y)} x2={coord_middle_string(offset.x)} y2={coord_string(offset.y)} class={upgrade_css} /><line x1={coord_middle_string(prerequisite.x)} y1={coord_bottom_string(prerequisite.y)} x2={coord_middle_string(offset.x)} y2={coord_string(offset.y)} class={prerequisite_css} /></>}
+                                } else {html_nested! {<></>}}
+                            }).collect::<Html>()}}
+                            else if let Some(downgrade) = tower.downgrade().map(|downgrade| layout[downgrade]) {
+                                <line x1={coord_middle_string(downgrade.x)} y1={coord_bottom_string(downgrade.y)} x2={coord_middle_string(offset.x)} y2={coord_string(offset.y)} class={upgrade_css} />
+                            }
                         </>
                     }
                 }).collect::<Html>()}

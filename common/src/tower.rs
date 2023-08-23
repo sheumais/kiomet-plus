@@ -248,6 +248,8 @@ pub enum TowerType {
     #[capacity(Soldier = 12, Tank = 2, Shield = 10)]
     #[generate(Soldier = 6)]
     Barracks,
+    #[capacity(Shield = 1)]
+    Buoy,
     #[prerequisite(Mine, 30, Headquarters = 1, Ews = 1)]
     #[capacity(Soldier = 6, Shield = 40)]
     Bunker,
@@ -264,6 +266,12 @@ pub enum TowerType {
     City,
     #[capacity(Soldier = 4, Tank = 2, Shield = 30)]
     Cliff,
+    #[prerequisite(Lighthouse, 40, Factory = 3)]
+    #[capacity(Soldier = 6, Tank = 2, Shield = 10)]
+    Dock,
+    #[prerequisite(Dock, 30, Generator = 2, Refinery = 1)]
+    #[capacity(Soldier = 8, Shield = 15)]
+    Drydock,
     #[tower(sensor_radius = 20)]
     #[prerequisite(Radar, 30, Generator = 2)]
     #[capacity(Soldier = 4, Tank = 2, Shield = 15)]
@@ -286,14 +294,18 @@ pub enum TowerType {
     #[capacity(Shield = 40)]
     #[generate(Shield = 3)]
     Icbm,
+    #[tower(sensor_radius = 48)]
     #[prerequisite(Reactor, 40, City = 25, Reactor = 15, Satellite = 15)]
     #[capacity(Shield = 40)]
     #[generate(Shield = 3)]
     Laser,
-    #[prerequisite(Rocket, 30, Airfield = 2)]
+    #[prerequisite(Radar, 30, Runway = 3)]
     #[capacity(Emp = 1, Shield = 15)]
     #[generate(Emp = 80)]
     Launcher,
+    #[tower(sensor_radius = 16)]
+    #[capacity(Soldier = 4, Shield = 10)]
+    Lighthouse,
     #[tower(score_weight = 12)]
     #[prerequisite(City, 40, City = 10, Town = 15, Village = 20)]
     #[capacity(Fighter = 2, Soldier = 6, Tank = 2, Shield = 20)]
@@ -323,7 +335,10 @@ pub enum TowerType {
     #[prerequisite(Factory, 20, Generator = 3, Cliff = 1)]
     #[capacity(Soldier = 4, Tank = 2, Shield = 5)]
     Refinery,
-    #[prerequisite(Radar, 20, Refinery = 1)]
+    #[prerequisite(Buoy, 20, Refinery = 1)]
+    #[capacity(Soldier = 8, Chopper = 2, Shield = 20)]
+    Rig,
+    #[prerequisite(Launcher, 20, Refinery = 1)]
     #[capacity(Soldier = 4, Tank = 2, Shield = 15)]
     Rocket,
     #[tower(spawnable)]
@@ -334,7 +349,7 @@ pub enum TowerType {
     #[prerequisite(Ews, 40, Rocket = 2, Generator = 5)]
     #[capacity(Soldier = 4, Tank = 2, Shield = 15)]
     Satellite,
-    #[prerequisite(Quarry, 40, Centrifuge = 2)]
+    #[prerequisite(Quarry, 40, Centrifuge = 2, Rocket = 1)]
     #[capacity(Nuke = 1, Soldier = 4, Tank = 1, Shield = 20)]
     #[generate(Nuke = 120)]
     Silo,
@@ -455,7 +470,7 @@ impl TowerType {
         let mut iter =
             TowerType::iter().filter(|t| t.downgrade().is_none() /*|| t.is_large()*/);
         // TODO calculate instead of hardcoding it.
-        const N: usize = 8;
+        const N: usize = 10;
         debug_assert_eq!(iter.clone().count(), N);
         iter.nth(hash as usize % N).unwrap()
     }

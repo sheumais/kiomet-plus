@@ -417,11 +417,14 @@ fn tower(tower_type: TowerType) -> Path {
         Armory => armory(),
         Artillery => artillery(),
         Barracks => barracks(),
+        Buoy => buoy(), // movement node
         Bunker => bunker(),
         Capitol => capitol(),
         Centrifuge => centrifuge(),
         City => city(),
         Cliff => cliff(),
+        Dock => dock(), //spawns boats
+        Drydock => drydock(), // spawns frigates
         Ews => ews(),
         Factory => factory(),
         Generator => generator(),
@@ -430,34 +433,41 @@ fn tower(tower_type: TowerType) -> Path {
         Icbm => icbm(),
         Laser => laser(),
         Launcher => launcher(),
+        Lighthouse => lighthouse(), // like a radar
         Metropolis => metropolis(),
         Mine => mine(),
+        //Pier => pier(),
         Projector => projector(),
         Quarry => quarry(),
         Radar => radar(),
         Rampart => rampart(),
         Reactor => reactor(),
         Refinery => refinery(),
+        Rig => rig(),
         Rocket => rocket(),
         Runway => airstrip(0.25),
         Satellite => satellite(),
         Silo => silo(),
         Town => town(),
+        //Turbine => turbine(), 
         Village => village(),
     }
 }
 
 fn unit(unit: Unit) -> Path {
     match unit {
+        //Unit::Boat => boat(),
         Unit::Bomber => bomber(),
         Unit::Chopper => chopper(),
         Unit::Emp => emp(),
         Unit::Fighter => fighter(),
+        //Unit::Frigate => frigate(),
         Unit::Nuke => nuke(),
         Unit::Ruler => ruler(),
         Unit::Shell => shell(),
         Unit::Shield => circle(0.4),
         Unit::Soldier => soldier(),
+        //Unit::Submarine => submarine(),
         Unit::Tank => tank(),
     }
 }
@@ -583,6 +593,34 @@ fn barracks() -> Path {
     p.build()
 }
 
+fn buoy() -> Path {
+    let mut p = Path::builder();
+    const RADIUS: f32 = 0.2;
+    const HAT_HEIGHT: f32 = 0.5 + RADIUS;
+    p.add_circle(pt(0.5, 0.3), RADIUS, Winding::Positive);
+    p.begin(pt(0.5, HAT_HEIGHT - RADIUS));
+
+    // hat 
+    p.line_to(pt(0.5, HAT_HEIGHT));
+    p.line_to(pt(0.4 - STROKE_WIDTH, HAT_HEIGHT));
+    p.line_to(pt(0.5, HAT_HEIGHT + 0.1 + STROKE_WIDTH));
+    p.line_to(pt(0.6 + STROKE_WIDTH, HAT_HEIGHT));
+    p.line_to(pt(0.5, HAT_HEIGHT));
+    p.close();
+
+    // middle line
+    p.begin(pt(0.5 - RADIUS, 0.3));
+    p.line_to(pt(0.5 + RADIUS, 0.3));
+    p.close();
+
+    // upper line    
+    p.begin(pt(0.5 - RADIUS, 0.3 + STROKE_WIDTH * 1.5));
+    p.line_to(pt(0.5 + RADIUS, 0.3 + STROKE_WIDTH * 1.5));
+    p.close();
+
+    p.build()
+}
+
 fn bunker() -> Path {
     let mut p = Path::builder();
     p.begin(pt(0.1, 0.3));
@@ -625,6 +663,10 @@ fn city() -> Path {
     p.line_to(pt(0.2, 0.7));
     p.line_to(pt(0.5, 0.8));
     p.line_to(pt(0.5, 0.6));
+    p.line_to(pt(0.4, 0.6));
+    p.line_to(pt(0.4, 0.2));
+    p.line_to(pt(0.4, 0.6));
+    p.line_to(pt(0.5, 0.6));
     p.line_to(pt(0.8, 0.6));
     p.line_to(pt(0.8, 0.2));
     p.line_to(pt(0.9, 0.2));
@@ -647,6 +689,60 @@ fn centrifuge() -> Path {
     p.line_to(pt(0.7, 0.4));
     p.line_to(pt(0.8, 0.3));
     p.line_to(pt(0.8, 0.2));
+    p.close();
+    p.build()
+}
+
+fn dock() -> Path {
+    let mut p = Path::builder();
+    p.begin(pt(0.1, 0.35));
+    p.line_to(pt(0.1, 0.5));
+    p.line_to(pt(0.35, 0.5));
+    p.line_to(pt(0.8, 1.0));
+    p.line_to(pt(0.8, 0.65));
+    p.line_to(pt(0.8, 0.9));
+    p.line_to(pt(0.45, 0.5));
+    p.line_to(pt(0.8, 0.5));
+    p.line_to(pt(0.8, 0.35));
+    p.line_to(pt(0.6, 0.35));
+    p.line_to(pt(0.6, 0.2));
+    p.line_to(pt(0.45, 0.2));
+    p.line_to(pt(0.45, 0.35));
+    p.close();
+    p.build()
+}
+
+fn drydock() -> Path {
+    let mut p = Path::builder();
+    p.begin(pt(0.1, 0.1));
+    p.line_to(pt(0.25, 0.8));
+    p.line_to(pt(0.25, 0.2));
+    p.line_to(pt(0.75, 0.2));
+    p.line_to(pt(0.75, 0.8));
+    p.line_to(pt(0.9, 0.1));
+    p.close();
+
+    p.begin(pt(0.5, 0.25));
+    p.line_to(pt(0.35, 0.3));
+    p.line_to(pt(0.3, 0.5));
+    p.line_to(pt(0.5, 0.6));
+    p.line_to(pt(0.7, 0.5));
+    p.line_to(pt(0.65, 0.3));
+    p.close();
+
+    p.begin(pt(0.4, 0.55));
+    p.line_to(pt(0.4, 0.65));
+    p.line_to(pt(0.5, 0.7));
+    p.line_to(pt(0.6, 0.65));
+    p.line_to(pt(0.6, 0.55));
+    p.line_to(pt(0.5, 0.6));
+    p.close();
+
+    p.begin(pt(0.45, 0.675));
+    p.line_to(pt(0.45, 0.765));
+    p.line_to(pt(0.55, 0.765));
+    p.line_to(pt(0.55, 0.675));
+    p.line_to(pt(0.5, 0.7));
     p.close();
     p.build()
 }
@@ -724,6 +820,25 @@ fn launcher() -> Path {
     p.build()
 }
 
+fn lighthouse() -> Path {
+    let mut p = Path::builder();
+    p.begin(pt(0.275, 0.1));
+    p.line_to(pt(0.325, 0.6));
+    p.line_to(pt(0.25, 0.7));
+    p.line_to(pt(0.35, 0.7));
+    p.line_to(pt(0.35, 0.85));
+    p.line_to(pt(0.5, 1.0));
+    p.line_to(pt(0.5, 1.1));
+    p.line_to(pt(0.5, 1.0));
+    p.line_to(pt(0.65, 0.85));
+    p.line_to(pt(0.65, 0.7));
+    p.line_to(pt(0.75, 0.7));
+    p.line_to(pt(0.675, 0.6));
+    p.line_to(pt(0.725, 0.1));
+    p.close();
+    p.build()
+}
+
 fn headquarters() -> Path {
     let mut p = Path::builder();
     p.begin(pt(0.1, 0.3));
@@ -790,6 +905,10 @@ fn metropolis() -> Path {
     p.line_to(pt(0.2 - base, 0.2));
     p.line_to(pt(0.2, 0.2));
     p.line_to(pt(0.2, 0.6));
+    p.line_to(pt(0.4, 0.7));
+    p.line_to(pt(0.5, 0.75));
+    p.line_to(pt(0.5, 0.2));
+    p.line_to(pt(0.5, 0.75));
     p.line_to(pt(0.4, 0.7));
     p.line_to(pt(0.4, 1.2));
     p.line_to(pt(0.8, 1.0));
@@ -952,6 +1071,32 @@ fn refinery() -> Path {
     p.line_to(pt(0.8, 0.3));
     p.line_to(pt(0.9, 0.3));
     p.line_to(pt(0.9, 0.2));
+    p.close();
+    p.build()
+}
+
+fn rig() -> Path {
+    let mut p = Path::builder();
+    p.begin(pt(0.1, 0.0));
+    p.line_to(pt(0.1, 0.5));
+    p.line_to(pt(0.2, 0.5));
+    p.line_to(pt(0.2, 0.8));
+    p.line_to(pt(0.3, 0.9));
+    p.line_to(pt(0.4, 0.8));
+    p.line_to(pt(0.4, 0.6));
+    p.line_to(pt(0.55, 0.7));
+    p.line_to(pt(0.55, 0.55));
+    p.line_to(pt(0.55, 0.7));
+    p.line_to(pt(0.4, 0.6));
+    p.line_to(pt(0.4, 0.4));
+    p.line_to(pt(0.7, 0.4));
+    p.line_to(pt(0.7, 0.7));
+    p.line_to(pt(0.9, 0.7));
+    p.line_to(pt(0.9, 0.0));
+    p.line_to(pt(0.8, 0.0));
+    p.line_to(pt(0.8, 0.3));
+    p.line_to(pt(0.2, 0.3));
+    p.line_to(pt(0.2, 0.0));
     p.close();
     p.build()
 }

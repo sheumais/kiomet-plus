@@ -1,4 +1,4 @@
-# Kiomet.com
+# Kiomet+ by Sheumais
 
 [![Build](https://github.com/sheumais/kiomet-plus/actions/workflows/build.yml/badge.svg)](https://github.com/sheumais/kiomet-plus/actions/workflows/build.yml)
 <a href='https://discord.gg/YMheuFQWTX'>

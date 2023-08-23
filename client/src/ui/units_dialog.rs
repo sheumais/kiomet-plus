@@ -128,6 +128,9 @@ pub fn units_dialog(props: &UnitsDialogProps) -> Html {
                         {"Immobile unless sent from "}
                         <TowerIcon tower_type={TowerType::Projector}/>
                         {"."}
+                        <p>
+                        {speed(selected)}
+                        </p>
                     } else {
                         {speed(selected)}
                     }
