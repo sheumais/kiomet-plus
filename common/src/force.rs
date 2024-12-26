@@ -280,7 +280,7 @@ impl Force {
     pub fn progress_required(&self) -> u8 {
         let distance = self.current_source().distance(self.current_destination());
         // The constant controls the speed. 255 was the original value, and 180 is about 40% faster.
-        (distance * 180 / World::MAX_ROAD_LENGTH / 2).min(u8::MAX as u32) as u8
+        (distance * 127 / World::MAX_ROAD_LENGTH / 2).min(u8::MAX as u32) as u8
     }
 
     fn speed(&self) -> Speed {

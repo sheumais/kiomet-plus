@@ -414,7 +414,11 @@ impl TowerService {
             if !tower.can_destroy() {
                 let mut t = tower_id;
                 while locked.insert(t) {
-                    t = t.connectivity_id().unwrap();
+                    if let Some(connectivity_id) = t.connectivity_id() {
+                        t = connectivity_id;
+                    } else {
+                        break;
+                    }
                 }
 
                 // Lock towers around king within spawn_bubble (if they exist).
@@ -422,7 +426,11 @@ impl TowerService {
                     spawn_bubble(tower_id, player_id, |mut t| {
                         if self.world.chunk.contains(t) {
                             while locked.insert(t) {
-                                t = t.connectivity_id().unwrap();
+                                if let Some(connectivity_id) = t.connectivity_id() {
+                                    t = connectivity_id;
+                                } else {
+                                    break;
+                                }
                             }
                         }
                     })
@@ -534,7 +542,11 @@ impl TowerService {
             if !tower_ids.insert(tower_id) {
                 break;
             }
-            tower_id = tower_id.neighbor_unchecked(tower_id.connectivity().unwrap());
+            if let Some(connectivity) = tower_id.connectivity() {
+                tower_id = tower_id.neighbor_unchecked(connectivity);
+            } else {
+                break;
+            }
         }
     }
 

@@ -187,14 +187,14 @@ fn unit_angle(unit: Unit, mut angle: f32) -> f32 {
     }
 
     angle = real_fract(angle * (1.0 / TAU)) * TAU;
-    if unit.field(false, true, false) == Field::Surface {
+    if unit.field(false, true, true) == Field::Air {
+        angle
+    } else {
         if angle >= PI {
             0.0001
         } else {
             -0.0001
         }
-    } else {
-        angle
     }
 }
 

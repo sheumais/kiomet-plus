@@ -11,7 +11,7 @@ SERVER_4 := 139.144.238.23
 all: debug
 
 debug:
-	RUST_BACKTRACE=1 cargo run -- --min-bots 256 --chat-log /tmp/kiomet.chat --debug-http info --http-port 8080 --https-port 8443
+	RUST_BACKTRACE=1 cargo run -- --min-bots 32 --chat-log /tmp/kiomet.chat --debug-http info --http-port 8080 --https-port 8443
 
 release:
 	cargo run --release -- --min-bots 256 --debug-http info

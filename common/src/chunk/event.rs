@@ -106,7 +106,7 @@ pub enum ChunkInput {
 
 impl Message for ChunkInput {}
 
-impl<C: OnInfo + OnChunkEvent> Apply<ChunkInput, C> for Chunk {
+impl<C: OnInfo + OnChunkEvent> Apply<ChunkInput, C> for Chunk { // Important function %%
     fn apply(&mut self, u: &ChunkInput, context: &mut C) {
         match u.clone() {
             ChunkInput::AddInboundForce { tower_id, force } => {

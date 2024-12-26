@@ -16,6 +16,16 @@ pub fn changelog_dialog() -> Html {
             <p>{"Warning: This changelog may not always be fully up to date"}</p>
             // <li>{""}</li>
 
+            <h2>{"2024"}</h2>
+
+            <h3>{"26/12/2024"}</h3>
+            <ul>
+                <li>{"Added two more water towers:"}<TowerIcon tower_type={TowerType::Minefield} /><TowerIcon tower_type={TowerType::Lab} /></li>
+                <li>{"Added two ships:"}<UnitIcon unit={Unit::Frigate} /><UnitIcon unit={Unit::Submarine} /></li>
+                <li>{"Added pockets of water towers to simulate lakes/oceans around the map."}</li>
+                <li>{"Doubled tower connection distance for aquatic towers."}</li>
+            </ul>
+
             <h2>{"2023"}</h2>
 
             <h3>{"23/8/2023"}</h3>

@@ -8,7 +8,7 @@ use common_util::storage::*;
 use common_util::x_vec2::U16Vec2;
 use std::array;
 
-const SIZE: usize = 512;
+const SIZE: usize = 256;
 const SIZE_CHUNKS: usize = SIZE / Chunk::SIZE;
 
 #[derive(Debug)]

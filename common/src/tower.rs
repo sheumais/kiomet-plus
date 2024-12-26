@@ -266,11 +266,13 @@ pub enum TowerType {
     City,
     #[capacity(Soldier = 4, Tank = 2, Shield = 30)]
     Cliff,
-    #[prerequisite(Lighthouse, 40, Factory = 3)]
-    #[capacity(Soldier = 6, Tank = 2, Shield = 10)]
+    #[prerequisite(Lighthouse, 30, Factory = 3)]
+    #[capacity(Frigate = 4, Shield = 15)]
+    #[generate(Frigate = 20)]
     Dock,
-    #[prerequisite(Dock, 30, Generator = 2, Refinery = 1)]
-    #[capacity(Soldier = 8, Shield = 15)]
+    #[prerequisite(Dock, 60, Quarry = 1, Refinery = 2)]
+    #[capacity(Frigate = 3, Submarine = 3, Shield = 15)]
+    #[generate(Submarine = 30)]
     Drydock,
     #[tower(sensor_radius = 20)]
     #[prerequisite(Radar, 30, Generator = 2)]
@@ -294,6 +296,10 @@ pub enum TowerType {
     #[capacity(Shield = 40)]
     #[generate(Shield = 3)]
     Icbm,
+    #[tower(score_weight = 2)]
+    #[prerequisite(Rig, 60, Reactor = 1, Radar = 1, Drydock = 1)]
+    #[capacity(Shield = 30)]
+    Lab,
     #[tower(sensor_radius = 48)]
     #[prerequisite(Reactor, 40, City = 25, Reactor = 15, Satellite = 15)]
     #[capacity(Shield = 40)]
@@ -303,8 +309,8 @@ pub enum TowerType {
     #[capacity(Emp = 1, Shield = 15)]
     #[generate(Emp = 80)]
     Launcher,
-    #[tower(sensor_radius = 16)]
-    #[capacity(Soldier = 4, Shield = 10)]
+    #[tower(sensor_radius = 8)]
+    #[capacity(Frigate = 1, Shield = 10)]
     Lighthouse,
     #[tower(score_weight = 12)]
     #[prerequisite(City, 40, City = 10, Town = 15, Village = 20)]
@@ -313,6 +319,10 @@ pub enum TowerType {
     #[tower(score_weight = 2)]
     #[capacity(Soldier = 4, Tank = 2, Shield = 15)]
     Mine,
+    #[prerequisite(Buoy, 15, Factory = 1)]
+    #[capacity(Shield = 20)]
+    #[generate(Shield = 3)]
+    Minefield,
     #[prerequisite(Centrifuge, 20, Rampart = 2, Reactor = 2)]
     #[capacity(Soldier = 4, Tank = 2, Shield = 10)]
     #[generate(Shield = 3)]
@@ -335,8 +345,9 @@ pub enum TowerType {
     #[prerequisite(Factory, 20, Generator = 3, Cliff = 1)]
     #[capacity(Soldier = 4, Tank = 2, Shield = 5)]
     Refinery,
-    #[prerequisite(Buoy, 20, Refinery = 1)]
-    #[capacity(Soldier = 8, Chopper = 2, Shield = 20)]
+    #[tower(score_weight = 3)]
+    #[prerequisite(Buoy, 30, Refinery = 1, Dock = 2)]
+    #[capacity(Chopper = 2, Frigate = 1, Shield = 10)]
     Rig,
     #[prerequisite(Launcher, 20, Refinery = 1)]
     #[capacity(Soldier = 4, Tank = 2, Shield = 15)]
@@ -369,6 +380,13 @@ impl TowerType {
         matches!(
             self,
             Self::Capitol | Self::Icbm | Self::Laser | Self::Metropolis
+        )
+    }
+
+    pub fn is_aquatic(self) -> bool {
+        matches!(
+            self,
+            Self::Lighthouse | Self::Buoy | Self::Rig | Self::Dock | Self::Drydock
         )
     }
 
@@ -419,6 +437,7 @@ impl TowerType {
         match self {
             Bunker | Capitol => damage / 3,
             Headquarters| Icbm | Laser => damage * 2 / 3,
+            Lab => damage / 2,
             _ => damage,
         }
     }
@@ -466,23 +485,23 @@ impl TowerType {
         <Self as IntoEnumIterator>::iter()
     }
 
-    pub(crate) fn generate(hash: u8) -> Self {
-        let mut iter =
-            TowerType::iter().filter(|t| t.downgrade().is_none() /*|| t.is_large()*/);
-        // TODO calculate instead of hardcoding it.
-        const N: usize = 10;
-        debug_assert_eq!(iter.clone().count(), N);
-        iter.nth(hash as usize % N).unwrap()
-    }
-}
-
-#[cfg(feature = "server")]
-use rand::prelude::*;
-#[cfg(feature = "server")]
-impl Distribution<TowerType> for rand::distributions::Standard {
-    fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> TowerType {
-        TowerType::generate(rng.gen())
-    }
+    pub(crate) fn generate(hash: u8, noise_value: f64) -> Self {
+        const AQUATIC_THRESHOLD: f64 = -0.25;
+        let is_aquatic = noise_value < AQUATIC_THRESHOLD;
+    
+        let filtered_items: Vec<_> = TowerType::iter()
+            .filter(|t| t.downgrade().is_none())
+            .filter(|t| t.is_aquatic() == is_aquatic)
+            .collect();
+    
+        let count = filtered_items.len();
+        if count == 0 {
+            panic!("Filtered iterator is empty");
+        }
+    
+        let index = hash as usize % count;
+        filtered_items[index].clone()
+    }    
 }
 
 #[cfg(test)]

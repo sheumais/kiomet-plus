@@ -431,11 +431,13 @@ fn tower(tower_type: TowerType) -> Path {
         Headquarters => headquarters(),
         Helipad => helipad(),
         Icbm => icbm(),
+        Lab => lab(),
         Laser => laser(),
         Launcher => launcher(),
         Lighthouse => lighthouse(), // like a radar
         Metropolis => metropolis(),
         Mine => mine(),
+        Minefield => minefield(),
         //Pier => pier(),
         Projector => projector(),
         Quarry => quarry(),
@@ -461,13 +463,13 @@ fn unit(unit: Unit) -> Path {
         Unit::Chopper => chopper(),
         Unit::Emp => emp(),
         Unit::Fighter => fighter(),
-        //Unit::Frigate => frigate(),
+        Unit::Frigate => frigate(),
         Unit::Nuke => nuke(),
         Unit::Ruler => ruler(),
         Unit::Shell => shell(),
         Unit::Shield => circle(0.4),
         Unit::Soldier => soldier(),
-        //Unit::Submarine => submarine(),
+        Unit::Submarine => submarine(),
         Unit::Tank => tank(),
     }
 }
@@ -747,6 +749,39 @@ fn drydock() -> Path {
     p.build()
 }
 
+fn lab() -> Path {
+    let mut p = Path::builder();
+    p.begin(pt(0.2, 0.05));
+    p.line_to(pt(0.2, 0.2));
+    p.quadratic_bezier_to(pt(0.0, 0.35), pt(0.2, 0.5));
+    p.line_to(pt(0.5, 0.5));
+    p.line_to(pt(0.5, 0.6)); 
+    p.line_to(pt(0.3, 0.6));
+    p.quadratic_bezier_to(pt(0.2, 0.675), pt(0.3, 0.75));
+    p.line_to(pt(0.8, 0.75));
+    p.quadratic_bezier_to(pt(0.9, 0.675), pt(0.8, 0.6));
+    p.line_to(pt(0.6, 0.6));
+    p.line_to(pt(0.6, 0.5));
+    p.line_to(pt(0.8, 0.5));
+    p.quadratic_bezier_to(pt(1.0, 0.35), pt(0.8, 0.2));
+    p.line_to(pt(0.8, 0.05));
+    p.line_to(pt(0.8, 0.2));
+    p.line_to(pt(0.2, 0.2));
+    p.close();
+    p.begin(pt(0.3, 0.35));
+    p.line_to(pt(0.4, 0.35));
+    p.close();
+    p.begin(pt(0.7, 0.35));
+    p.line_to(pt(0.6, 0.35));
+    p.begin(pt(0.4, 0.675));
+    p.line_to(pt(0.5, 0.675));
+    p.close();
+    p.begin(pt(0.7, 0.675));
+    p.line_to(pt(0.6, 0.675));
+    p.close();
+    p.build()
+}
+
 #[allow(unused)]
 fn icbm() -> Path {
     let pt = offset_pt(1.25, Vec2::new(0.0, -0.15));
@@ -835,6 +870,16 @@ fn lighthouse() -> Path {
     p.line_to(pt(0.75, 0.7));
     p.line_to(pt(0.675, 0.6));
     p.line_to(pt(0.725, 0.1));
+    p.close();
+
+    p.add_circle(pt(0.5, 0.7), 0.05, Winding::Positive);
+
+    p.begin(pt(0.5, 0.5));
+    p.line_to(pt(0.5, 0.4));
+    p.close();
+
+    p.begin(pt(0.5, 0.3));
+    p.line_to(pt(0.5, 0.2));
     p.close();
     p.build()
 }
@@ -931,6 +976,46 @@ fn mine() -> Path {
     p.quadratic_bezier_to(pt(0.5, 0.4), pt(0.4, 0.3));
     p.line_to(pt(0.4, 0.2));
     p.close();
+    p.build()
+}
+
+fn minefield() -> Path {
+    let mut p = Path::builder();
+    p.begin(pt(0.5, 0.4));
+    p.line_to(pt(0.5, 0.0));
+    p.line_to(pt(0.35, 0.0));
+    p.line_to(pt(0.65, 0.0));
+    p.line_to(pt(0.5, 0.0));
+    p.line_to(pt(0.5, 0.4));
+    p.close();
+    p.add_circle(pt(0.5, 0.6), 0.2, Winding::Positive);
+    p.begin(pt(0.3, 0.6));
+    p.line_to(pt(0.2, 0.6));
+    p.close();
+    p.begin(pt(0.7, 0.6));
+    p.line_to(pt(0.8, 0.6));
+    p.close();
+    p.begin(pt(0.5, 0.8));
+    p.line_to(pt(0.5, 0.9));
+    p.close();
+
+    // Adding precise 45-degree points on the circle
+    p.begin(pt(0.5 - 0.1414, 0.6 - 0.1414)); // Top-left
+    p.line_to(pt(0.5 - 0.2, 0.6 - 0.2));
+    p.close();
+
+    p.begin(pt(0.5 + 0.1414, 0.6 - 0.1414)); // Top-right
+    p.line_to(pt(0.5 + 0.2, 0.6 - 0.2));
+    p.close();
+
+    p.begin(pt(0.5 - 0.1414, 0.6 + 0.1414)); // Bottom-left
+    p.line_to(pt(0.5 - 0.2, 0.6 + 0.2));
+    p.close();
+
+    p.begin(pt(0.5 + 0.1414, 0.6 + 0.1414)); // Bottom-right
+    p.line_to(pt(0.5 + 0.2, 0.6 + 0.2));
+    p.close();
+
     p.build()
 }
 
@@ -1306,6 +1391,52 @@ fn fighter() -> Path {
     p.line_to(pt(0.6, 0.25));
     p.line_to(pt(0.65, 0.1));
     p.line_to(pt(0.5, 0.2));
+    p.close();
+    p.build()
+}
+
+fn frigate() -> Path {
+    let mut p = Path::builder();
+    p.begin(pt(0.1, 0.05));
+    p.line_to(pt(0.05, 0.15));
+    p.line_to(pt(0.25, 0.15));
+    p.line_to(pt(0.3, 0.25));
+    p.line_to(pt(0.35, 0.25));
+    p.line_to(pt(0.35, 0.40));
+    p.line_to(pt(0.35, 0.25));
+    p.line_to(pt(0.45, 0.25));
+    p.line_to(pt(0.5, 0.4));
+    p.line_to(pt(0.5, 0.5));
+    p.line_to(pt(0.5, 0.4));
+    p.line_to(pt(0.55, 0.4));
+    p.line_to(pt(0.6, 0.3));
+    p.line_to(pt(0.65, 0.3));
+    p.line_to(pt(0.75, 0.15));
+    p.line_to(pt(0.9, 0.15));
+    p.line_to(pt(0.8, 0.05));
+    p.line_to(pt(0.1, 0.05));
+    p.close();
+    p.build()
+}
+
+fn submarine() -> Path {
+    let mut p = Path::builder();
+    p.begin(pt(0.0, 0.3));
+    p.line_to(pt(0.0, 0.7));
+    p.line_to(pt(0.05, 0.5));
+    p.line_to(pt(0.0, 0.3));
+    p.line_to(pt(0.05, 0.5));
+    p.quadratic_bezier_to(pt(0.2, 0.6),pt(0.35, 0.6));
+    p.line_to(pt(0.45, 0.7));
+    p.line_to(pt(0.6, 0.7));
+    p.line_to(pt(0.6, 0.8));
+    p.line_to(pt(0.6, 0.7));
+    p.line_to(pt(0.65, 0.7));
+    p.line_to(pt(0.7, 0.6));
+    p.line_to(pt(0.9, 0.6));
+    p.quadratic_bezier_to(pt(1.0, 0.5),pt(0.9, 0.4));
+    p.line_to(pt(0.35, 0.4));
+    p.quadratic_bezier_to(pt(0.2, 0.4),pt(0.05, 0.5));
     p.close();
     p.build()
 }

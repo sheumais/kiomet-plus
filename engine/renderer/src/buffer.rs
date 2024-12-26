@@ -376,7 +376,7 @@ impl<V: Vertex, I: Index> TriangleBuffer<V, I> {
     /// Copies vertices and indices into the [`TriangleBuffer`].
     /// If indices is empty it performs array based rendering.
     pub fn buffer(&mut self, renderer: &Renderer, vertices: &[V], indices: &[I]) {
-        assert!(!vertices.is_empty(), "buffering no vertices");
+        // assert!(!vertices.is_empty(), "buffering no vertices");
         let gl = &renderer.gl;
         self.vertices.buffer(gl, vertices);
         self.indices.buffer(gl, indices);

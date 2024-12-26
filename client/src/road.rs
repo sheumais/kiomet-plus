@@ -59,7 +59,7 @@ impl RoadLayer {
         supply: bool,
         mut get_visibility: impl FnMut(TowerId) -> f32,
     ) -> bool {
-        let max_edge_distance = max_edge_distance.unwrap_or(World::MAX_ROAD_LENGTH);
+        let max_edge_distance = max_edge_distance.unwrap_or(World::MAX_ROAD_LENGTH * 2);
 
         let mut uv = 0.0;
         let mut previous_pos = None;
@@ -85,7 +85,7 @@ impl RoadLayer {
                 continue;
             }
             let color =
-                if hypothetical || i >= max_edges || next.0.distance(prev.0) > max_edge_distance {
+                if hypothetical || i >= max_edges || next.0.distance(prev.0) > 2 * max_edge_distance {
                     hypothetical = true;
                     Vec4::new(0.8, 0.4, 0.2, 0.5)
                 } else {

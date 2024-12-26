@@ -33,12 +33,14 @@ pub trait TowerTranslation: Copy + Sized {
             Generator => self.generator_label(),
             Headquarters => self.headquarters_label(),
             Helipad => self.helipad_label(),
+            Lab => "Underwater Lab", // TODO
             Icbm => "ICBM",   // TODO
             Laser => "Laser", // TODO
             Launcher => self.launcher_label(),
             Lighthouse => "Lighthouse", // TODO
             Metropolis => "Metropolis", // TODO
             Mine => self.mine_label(),
+            Minefield => "Minefield", // TODO
             //Pier => "Pier", // TODO
             Projector => self.projector_label(),
             Quarry => self.quarry_label(),
@@ -94,13 +96,13 @@ pub trait TowerTranslation: Copy + Sized {
             Chopper => self.chopper_label(),
             Emp => self.emp_label(),
             Fighter => self.fighter_label(),
-            //Frigate => "Frigate", // TODO
+            Frigate => "Frigate", // TODO
             Nuke => self.nuke_label(),
             Ruler => self.ruler_label(),
             Shell => self.shell_label(),
             Shield => self.shield_label(),
             Soldier => self.soldier_label(),
-            //Submarine => "Submarine", // TODO
+            Submarine => "Submarine", // TODO
             Tank => self.tank_label(),
         }
     }

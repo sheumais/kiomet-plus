@@ -9,6 +9,7 @@ use core_protocol::prelude::*;
 use glam::Vec2;
 use std::ops::{Deref, DerefMut};
 use std::sync::LazyLock;
+use noise::{NoiseFn, Perlin};
 
 // Use 32 bit fnv hash because it's fast.
 const FNV_OFFSET: u32 = 2166316261;
@@ -40,6 +41,12 @@ pub struct TowerId(
     /*#[bitcode_hint(expected_range = "0..511")]*/ pub U16Vec2,
 );
 
+fn simple_noise(x: i32, y: i32) -> f32 {
+    let perlin = Perlin::new(314159);
+    let noise_value = perlin.get([x as f64 * 0.15, y as f64 * 0.15]);
+    noise_value as f32
+}
+
 impl TowerId {
     pub const CONVERSION: u16 = 5;
 
@@ -59,11 +66,15 @@ impl TowerId {
             write_u8(bytes[0]);
             write_u8(bytes[1]);
         };
-        let c = self.0.wrapping_add(U16Vec2::splat(31415)); // Add an amount to be different from OffsetTable.
+        let c = self.0.wrapping_add(U16Vec2::splat(27182));
         write_u16(c.x);
         write_u16(c.y);
+    
+        let noise_value = simple_noise(c.x as i32, c.y as i32);
+    
         let hash = condense!(condense!(hash, u16), u8);
-        TowerType::generate(hash)
+    
+        TowerType::generate(hash, noise_value.into())
     }
 
     #[inline]
@@ -439,9 +450,23 @@ impl NeighborTable {
                 return false; // Same or outside world.
             }
             let distance = a.distance_squared(b);
-            if distance > World::MAX_ROAD_LENGTH_SQUARED {
+            if distance > if a.tower_type().is_aquatic() && b.tower_type().is_aquatic() {
+                World::MAX_ROAD_LENGTH_SQUARED * 2
+            } else {
+                World::MAX_ROAD_LENGTH_SQUARED
+            } {
                 return false; // Too far apart.
             }
+
+            match (a.tower_type(), b.tower_type()) {
+                (TowerType::Lighthouse, TowerType::Lighthouse) => return false,
+                (TowerType::Lighthouse, _) => (),
+                (_, TowerType::Lighthouse) => (),
+                (a_type, b_type) if a_type.is_aquatic() && b_type.is_aquatic() => (),
+                (a_type, b_type) if a_type.is_aquatic() || b_type.is_aquatic() => return false,
+                _ => (),
+            }
+
             let diagonal = b.x != a.x && b.y != a.y;
             if diagonal {
                 let other1 = TowerId::new(a.x, b.y);

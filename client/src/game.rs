@@ -351,11 +351,18 @@ impl GameClient for TowerGame {
 
                     // Fade out roads of invisible towers.
                     let s = Vec3::splat(1.0).extend(0.05);
+                    let t = Vec3::new(0.8, 0.8, 1.0).extend(0.1);
                     let e = if visible { s.w } else { 0.0 };
 
-                    layer
+                    if tower_id.tower_type().is_aquatic() {
+                        layer
+                        .roads
+                        .draw_road(tower_position, nearby_tower_id.as_vec2(), 0.08, t, e);
+                    } else {
+                        layer
                         .roads
                         .draw_road(tower_position, nearby_tower_id.as_vec2(), 0.12, s, e);
+                    }
                 }
             }
 

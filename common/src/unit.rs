@@ -41,10 +41,13 @@ pub enum Unit {
     Chopper,
     /// Bombers need to take out as many ground forces as possible.
     Bomber,
+    Frigate,
+    Submarine,
     /// Tanks defend soldiers.
     Tank,
     /// Soldiers are weakest so they fight last.
     Soldier,
+
     /// Order special units after regular ones.
     /// Is [`Unit::FIRST_SINGLE`] because it's the first unit that's present in single units.
     Shell,
@@ -136,6 +139,8 @@ impl Unit {
             Self::Fighter => 4,
             Self::Bomber => 2,
             Self::Chopper => 2,
+            Self::Frigate => 3,
+            Self::Submarine => 2,
             _ => 0,
         }
     }
@@ -151,6 +156,8 @@ impl Unit {
             // TODO: Should only do 2 air damage
             // (https://discord.com/channels/847143438939717663/933850279537967204/1018971807979688078)
             Self::Chopper if field == Field::Air => 3,
+            Self::Frigate => 4,
+            Self::Submarine => 7,
             Self::Nuke => Self::INFINITE_DAMAGE,
             Self::Shell => 3, // TODO shell shouldn't hit regular units.
             _ => 1,
@@ -173,6 +180,20 @@ impl Unit {
     /// Units that can skip over roads have to be single use to prevent territory acquisition.
     pub fn is_single_use(self) -> bool {
         self.ranged_distance().is_some()
+    }
+
+    pub fn is_aquatic(self) -> bool {
+        matches!(
+            self,
+            Self::Frigate | Self::Submarine | Self::Bomber | Self::Chopper | Self::Fighter | Self::Shield | Self::Ruler
+        )
+    }
+
+    pub fn is_strictly_aquatic(self) -> bool {
+        matches!(
+            self,
+            Self::Frigate | Self::Submarine
+        )
     }
 
     /// Returns the field of a unit.
